@@ -69,10 +69,3 @@ def reduce_pass(data):
                 if reduce(data, x, y):
                     progress = True
     return progress
-
-data = get_puzzle('puzzles/1.txt')
-print_puzzle(data)
-while reduce_pass(data):
-    print
-    print
-    print_puzzle(data)

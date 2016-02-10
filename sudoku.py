@@ -11,11 +11,11 @@ def get_puzzle(file_path):
         for l in open(file_path,'r').read().split('\n')
     ]
 
-def print_puzzle(data):
-    for row in data:
-        for col in row:
-            print (col if type(col) != set else ' '),
-        print
+def puzzle_string(data):
+    return '\n'.join(
+        ' '.join(col if type(col) != set else ' ' for col in row)
+        for row in data
+    )
 
 def knowns(data):
     return (i for i in data if type(i) != set)

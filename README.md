@@ -1,0 +1,4 @@
+===Sudoku Solver===
+I wrote a Java-based Sudoku solver as a teaching tool a decade ago, but it would only solve unambiguous puzzles (those where you never HAD to try multiple options to see which worked - there was always a definite answer to at least one more piece on the board until it was solved).
+
+Now, after reviewing some of my old code and watching Jack Diederich's "Stop Writing Classes" talk (https://youtu.be/o9pEzgHorH0) I've decided to take another stab at it in Python, try to branch, and try to compare efficiency between using a class which tracks value, options, and position, or a simple array of options.

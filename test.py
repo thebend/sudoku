@@ -11,3 +11,11 @@ solver = sudokuclass.Sudoku('puzzles/1.txt')
 print solver.puzzle_string()
 solver.solve()
 print solver.puzzle_string()
+
+print
+
+import sudokun
+solver = sudokun.Sudoku('puzzles/1.txt')
+print solver.puzzle_string()
+solver.solve()
+print solver.puzzle_string()

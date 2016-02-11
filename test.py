@@ -1,10 +1,22 @@
 from timeit import timeit
 import sudoku
+import sudokuclass
+import sudokun
 
-data = sudoku.get_puzzle('puzzles/1.txt')
-print sudoku.puzzle_string(data)
-sudoku.solve(data)
-print sudoku.puzzle_string(data)
+board = sudoku.get_puzzle('puzzles/1.txt')
+print sudoku.puzzle_string(board)
+
+puzzle = sudoku.get_puzzle('puzzles/1.txt')
+sudoku.solve(puzzle)
+print sudoku.puzzle_string(puzzle)
+
+puzzle = sudokuclass.Sudoku('puzzles/1.txt')
+puzzle.solve()
+print puzzle
+
+puzzle = sudokun.Sudoku('puzzles/1.txt')
+puzzle.solve()
+print puzzle
 
 print timeit(
     "sudoku.solve(sudoku.get_puzzle('puzzles/1.txt'))",

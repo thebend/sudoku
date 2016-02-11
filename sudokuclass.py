@@ -14,10 +14,10 @@ class Sudoku:
             for line in open(file_path,'r').read().split('\n')
         ]
 
-    def puzzle_string(self):
+    def __repr__(self):
         return '\n'.join(
             ' '.join(col if type(col) != set else ' ' for col in row)
-            for row in self.data
+            for row in self.board
         )
 
     def row(self, row):
@@ -60,5 +60,4 @@ class Sudoku:
         return progress
 
     def solve(self):
-        while self.reduce_pass():
-            pass
+        while self.reduce_pass(): pass

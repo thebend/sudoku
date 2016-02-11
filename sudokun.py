@@ -28,7 +28,7 @@ class Tile:
                 r.reduce(self.val())
 
 class Sudoku:
-    def puzzle_string(self):
+    def __repr__(self):
         return '\n'.join(
             ' '.join(point.val() for point in line)
             for line in self.board

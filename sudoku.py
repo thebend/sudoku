@@ -1,5 +1,9 @@
-OPTIONS = set(('1','2','3','4','5','6','7','8','9'))
-BOX_SIZE = len(OPTIONS) / 3
+from math import sqrt
+
+# OPTIONS = set('123456789')
+OPTIONS = set('123456789ABCDEFG')
+# OPTIONS = set('123456789ABCDEFGHIJKLMNOP')
+BOX_SIZE = int(sqrt(len(OPTIONS)))
 
 def knowns(points):
     return (i for i in points if type(i) != set)

@@ -2,6 +2,19 @@ OPTIONS = ('1','2','3','4','5','6','7','8','9')
 PUZZLE_SIZE = len(OPTIONS)
 BOX_SIZE = PUZZLE_SIZE / 3
 
+class Tile:
+    def __init__(self, pos, val = None):
+        self.pos = pos
+        self.val = val
+        if self.val == None:
+            self.options = set(OPTIONS)
+
+    def reduce(self, val):
+        self.options.discard(val)
+        if len(self.options) > 1: return False
+        self.val = self.options.pop()
+        return True
+        
 def get_options():
     return set(OPTIONS)
 
@@ -48,7 +61,7 @@ def reduce(data, x, y):
     point -= set(knowns(relations))
     # if only one value left, we've solved that point
     if len(point) == 0:
-        print puzzle_string(data)
+        print_puzzle(data)
         raise ValueError('Point {}, {} appears to have no possible options'.format(x, y))
     if len(point) == 1:
         point = point.pop()

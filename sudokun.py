@@ -1,6 +1,9 @@
 OPTIONS = set(('1','2','3','4','5','6','7','8','9'))
 BOX_SIZE = len(OPTIONS) / 3
 
+def unknowns(data):
+    return (i for i in data if not i.known())
+
 class Tile:
     def __init__(self, val):
         self.options = OPTIONS.copy() if val == ' ' else set(val)
@@ -57,7 +60,7 @@ class Sudoku:
 
         for x, line in enumerate(self.board):
             for y, p in enumerate(line):
-                p.unknown_relatives = set(self.related(x, y))
+                p.unknown_relatives = set(unknowns(self.related(x, y)))
                 p.unknown_relatives.discard(p) # not relative of self!
 
     def solve(self):

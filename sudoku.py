@@ -1,6 +1,12 @@
 OPTIONS = set(('1','2','3','4','5','6','7','8','9'))
 BOX_SIZE = len(OPTIONS) / 3
 
+def knowns(points):
+    return (i for i in points if type(i) != set)
+
+def unknowns(points):
+    return (i for i in points if type(i) == set)
+
 def get_puzzle(file_path):
     return [
         [OPTIONS.copy() if c == ' ' else c for c in l]
@@ -12,12 +18,6 @@ def puzzle_string(board):
         ' '.join(val if type(val) != set else ' ' for val in line)
         for line in board
     )
-
-def knowns(points):
-    return (i for i in points if type(i) != set)
-
-def unknowns(points):
-    return (i for i in points if type(i) == set)
 
 def row(board, row):
     return (i for i in board[row])

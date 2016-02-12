@@ -1,16 +1,16 @@
-1  234  C 6   7 
-  8   7  3  9A6B
- C  A  1 D B  E 
-3  F2  E   9  C 
-D   8  A C2 1F  
- B76   G   F  5D
-   A 5F  4 8  B 
-G  59C  1     8 
- 2     D  C58  3
- D  F 3  E8 G   
-58  1   2   D9F 
-  C4 6G D  7   5
- 3  C   6  4B  G
- 7  G 5 D  1  2 
-B1F9  D  2   E  
- E   B 2  D35  C
+  A  98 C   6 D 
+DF  E C 753A0  B
+E              5
+ 7 C 4B  F  8 A 
+    B D7 9 EF   
+ A    E  1  D  C
+4 F 32    7  8  
+   D  5 4 6  E9 
+   F       3A9  
+79E F     8C    
+B   45  F 97231 
+   3   15B   D  
+  37     AD    4
+ 6 9  1   4   58
+ B 5834CE  1    
+ D    A6 0F C E 

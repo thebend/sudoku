@@ -25,8 +25,8 @@ def solve(board, options = DEFAULT_OPTIONS):
             for by in xrange(boxy, boxy + boxlen)
             for bx in xrange(boxx, boxx + boxlen)
         ]
-        row = [board[i][y] for i in xrange(len(board))]
-        col = [i for i in board[x]]
+        row = [line[y] for line in board]
+        col = board[x]
         return row + col + box
 
     def reduce(board, x, y):

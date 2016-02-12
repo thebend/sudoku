@@ -24,8 +24,8 @@ class Sudoku:
             for by in xrange(boxy, boxy + self.boxlen)
             for bx in xrange(boxx, boxx + self.boxlen)
         ]
-        row = [self.board[i][y] for i in xrange(len(self.board))]
-        col = [i for i in self.board[x]]
+        row = [line[y] for line in self.board]
+        col = self.board[x]
         return row + col + box
 
     def reduce(self, x, y):

@@ -5,7 +5,7 @@ DEFAULT_OPTIONS = set('123456789')
 def get_board(file_path, options = DEFAULT_OPTIONS):
     return [
         [options.copy() if c == ' ' else c for c in line]
-        for line in open(file_path,'r').read().split('\n')
+        for line in open(file_path, 'r').read().split('\n')
     ]
 
 def board_string(board):

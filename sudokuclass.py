@@ -6,8 +6,8 @@ class Sudoku:
     def __init__(self, file_path, options = DEFAULT_OPTIONS):
         self.boxlen = int(sqrt(len(options)))
         self.board = [
-            [options.copy() if val == ' ' else val for val in line]
-            for line in open(file_path,'r').read().split('\n')
+            [options.copy() if c == ' ' else c for c in line]
+            for line in open(file_path, 'r').read().split('\n')
         ]
 
     def __repr__(self):

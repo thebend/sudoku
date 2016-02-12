@@ -5,6 +5,7 @@
 1. generators for primitive types?
 1. xy ordering is unintuitive
 1. list of lines vs xy coordinates
+1. Multithread solver to check multiple points at once?
 
 1. filtering with lambda to check for set was slower than list comprehension
 1. looking up point on board to decide whether to call function which looked up point

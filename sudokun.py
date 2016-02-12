@@ -6,7 +6,7 @@ class Tile:
     def __init__(self, val, options):
         self.options = options.copy() if val == ' ' else set(val)
 
-    def val(self):
+    def __repr__(self):
         return ' ' if len(self.options) > 1 else iter(self.options).next()
 
     def known(self):
@@ -28,7 +28,7 @@ class Tile:
 class Sudoku:
     def __repr__(self):
         return '\n'.join(
-            ' '.join(map(Tile.val, line))
+            ' '.join(map(str, line))
             for line in self.board
         )
 

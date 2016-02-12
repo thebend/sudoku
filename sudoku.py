@@ -21,7 +21,7 @@ def solve(board, options = DEFAULT_OPTIONS):
         boxx = (x / boxlen) * boxlen
         boxy = (y / boxlen) * boxlen
         box = [
-            board[bx][by] # box
+            board[bx][by]
             for by in xrange(boxy, boxy + boxlen)
             for bx in xrange(boxx, boxx + boxlen)
         ]

@@ -36,7 +36,7 @@ class Sudoku:
         boxx = (x / self.boxlen) * self.boxlen
         boxy = (y / self.boxlen) * self.boxlen
         box = [
-            self.board[bx][by] # box
+            self.board[bx][by]
             for by in xrange(boxy, boxy + self.boxlen)
             for bx in xrange(boxx, boxx + self.boxlen)
         ]

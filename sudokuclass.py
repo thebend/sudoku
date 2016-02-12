@@ -10,8 +10,7 @@ class Sudoku:
             for line in open(file_path, 'r').read().split('\n')
         ]
 
-    def __repr__(self):
-        return '\n'.join(
+    def __repr__(self): return '\n'.join(
             ' '.join(col if type(col) != set else ' ' for col in row)
             for row in self.board
         )
@@ -19,26 +18,21 @@ class Sudoku:
     def related(self, x, y):
         boxx = (x / self.boxlen) * self.boxlen
         boxy = (y / self.boxlen) * self.boxlen
-        box = [
+        return self.board[x] + [line[y] for line in self.board] + [
             self.board[bx][by]
             for by in xrange(boxy, boxy + self.boxlen)
             for bx in xrange(boxx, boxx + self.boxlen)
         ]
-        row = [line[y] for line in self.board]
-        col = self.board[x]
-        return row + col + box
 
     def reduce(self, x, y):
         point = self.board[x][y]
         relations = self.related(x, y)
-        knowns = (i for i in relations if type(i) != set)
-        unknowns = (i for i in relations if type(i) == set)
-        point -= set(knowns)
+        point -= set(i for i in relations if type(i) != set)
         if len(point) == 1:
             point = point.pop()
             self.board[x][y] = point
-            for i in unknowns:
-                i.discard(point)
+            for i in relations:
+                if type(i) == set: i.discard(point)
             return True
         return False
 
@@ -46,8 +40,7 @@ class Sudoku:
         progress = True
         while progress:
             progress = False
-            for x in xrange(len(self.board)):
-                for y in xrange(len(self.board[x])):
-                    if type(self.board[x][y]) == set:
-                        if self.reduce(x, y):
-                            progress = True
+            for x, line in enumerate(self.board):
+                for y, point in enumerate(line):
+                    if type(point) == set and self.reduce(x, y):
+                        progress = True

@@ -8,5 +8,6 @@
 1. Multithread solver to check multiple points at once?
 
 1. filtering with lambda to check for set was slower than list comprehension
+   Overhead creating lambda function in a loop?
 1. looking up point on board to decide whether to call function which looked up point
    was faster than always calling function, which looked up point once and stopped sometimes

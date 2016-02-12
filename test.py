@@ -3,12 +3,16 @@ import sudoku
 import sudokuclass
 import sudokun
 
-board = sudoku.get_puzzle('puzzles/1.txt')
-print sudoku.puzzle_string(board)
 
-puzzle = sudoku.get_puzzle('puzzles/1.txt')
+# OPTIONS = set('123456789ABCDEFG')
+# OPTIONS = set('123456789ABCDEFGHIJKLMNOP')
+
+board = sudoku.get_board('puzzles/1.txt')
+print sudoku.board_string(board)
+
+puzzle = sudoku.get_board('puzzles/1.txt')
 sudoku.solve(puzzle)
-print sudoku.puzzle_string(puzzle)
+print sudoku.board_string(puzzle)
 
 puzzle = sudokuclass.Sudoku('puzzles/1.txt')
 puzzle.solve()
@@ -19,7 +23,7 @@ puzzle.solve()
 print puzzle
 
 print timeit(
-    "sudoku.solve(sudoku.get_puzzle('puzzles/1.txt'))",
+    "sudoku.solve(sudoku.get_board('puzzles/1.txt'))",
     setup='import sudoku',
     number=1000
 )

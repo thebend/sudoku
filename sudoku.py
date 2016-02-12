@@ -1,67 +1,53 @@
 from math import sqrt
 
-# OPTIONS = set('123456789')
-OPTIONS = set('123456789ABCDEFG')
-# OPTIONS = set('123456789ABCDEFGHIJKLMNOP')
-BOX_SIZE = int(sqrt(len(OPTIONS)))
+DEFAULT_OPTIONS = set('123456789')
 
-def knowns(points):
-    return (i for i in points if type(i) != set)
-
-def unknowns(points):
-    return (i for i in points if type(i) == set)
-
-def get_puzzle(file_path):
+def get_board(file_path, options = DEFAULT_OPTIONS):
     return [
-        [OPTIONS.copy() if c == ' ' else c for c in l]
-        for l in open(file_path,'r').read().split('\n')
+        [options.copy() if c == ' ' else c for c in line]
+        for line in open(file_path,'r').read().split('\n')
     ]
 
-def puzzle_string(board):
+def board_string(board):
     return '\n'.join(
-        ' '.join(val if type(val) != set else ' ' for val in line)
+        ' '.join(c if type(c) != set else ' ' for c in line)
         for line in board
     )
 
-def row(board, row):
-    return (i for i in board[row])
+def solve(board, options = DEFAULT_OPTIONS):
+    boxlen = int(sqrt(len(options)))
+    
+    def related(board, x, y):
+        boxx = (x / boxlen) * boxlen
+        boxy = (y / boxlen) * boxlen
+        box = [
+            board[bx][by] # box
+            for by in xrange(boxy, boxy + boxlen)
+            for bx in xrange(boxx, boxx + boxlen)
+        ]
+        row = [board[i][y] for i in xrange(len(board))]
+        col = [i for i in board[x]]
+        return row + col + box
 
-def col(board, col):
-    return (board[i][col] for i in xrange(len(board)))
+    def reduce(board, x, y):
+        point = board[x][y]
+        relations = related(board, x, y)
+        knowns = (i for i in relations if type(i) != set)
+        unknowns = (i for i in relations if type(i) == set)
+        point -= set(knowns)
+        if len(point) == 1:
+            point = point.pop()
+            board[x][y] = point
+            for i in unknowns:
+                i.discard(point)
+            return True
+        return False
 
-def box(board, row, col):
-    row = (row / BOX_SIZE) * BOX_SIZE
-    col = (col / BOX_SIZE) * BOX_SIZE
-    for x in xrange(row, row + BOX_SIZE):
-        for y in xrange(col, col + BOX_SIZE):
-            yield board[x][y]
-
-def related(board, x, y):
-    for i in row(board, x): yield i
-    for i in col(board, y): yield i
-    for i in box(board, x, y): yield i
-
-def reduce(board, x, y):
-    point = board[x][y]
-    relations = related(board, x, y)
-    point -= set(knowns(relations)) # remove known values from possibilities
-    if len(point) == 1:
-        point = point.pop()
-        board[x][y] = point
-        for i in unknowns(relations):
-            i.discard(point)
-        return True
-    return False
-
-def reduce_pass(board):
-    progress = False
-    for x in xrange(len(board)):
-        for y in xrange(len(board[x])):
-            if type(board[x][y]) == set:
-                if reduce(board, x, y):
-                    progress = True
-    return progress
-
-def solve(board):
-    while reduce_pass(board):
-        pass
+    progress = True
+    while progress:
+        progress = False
+        for x in xrange(len(board)):
+            for y in xrange(len(board[x])):
+                if type(board[x][y]) == set:
+                    if reduce(board, x, y):
+                        progress = True

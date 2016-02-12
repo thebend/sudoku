@@ -1,16 +1,10 @@
 from math import sqrt
 
-# OPTIONS = set('123456789')
-OPTIONS = set('123456789ABCDEFG')
-# OPTIONS = set('123456789ABCDEFGHIJKLMNOP')
-BOX_SIZE = int(sqrt(len(OPTIONS)))
-
-def unknowns(data):
-    return (i for i in data if not i.known())
+DEFAULT_OPTIONS = set('123456789')
 
 class Tile:
-    def __init__(self, val):
-        self.options = OPTIONS.copy() if val == ' ' else set(val)
+    def __init__(self, val, options):
+        self.options = options.copy() if val == ' ' else set(val)
 
     def val(self):
         return ' ' if len(self.options) > 1 else iter(self.options).next()
@@ -29,42 +23,38 @@ class Tile:
             for r in self.unknown_relatives:
                 r.unknown_relatives.discard(self)
             for r in self.unknown_relatives:
-                r.reduce(self.val())
+                r.reduce(iter(self.options).next())
 
 class Sudoku:
     def __repr__(self):
         return '\n'.join(
-            ' '.join(point.val() for point in line)
+            ' '.join(map(Tile.val, line))
             for line in self.board
         )
 
-    def row(self, row):
-        return (i for i in self.board[row])
-
-    def col(self, col):
-        return (self.board[i][col] for i in xrange(len(self.board)))
-
-    def box(self, row, col):
-        row = (row / BOX_SIZE) * BOX_SIZE
-        col = (col / BOX_SIZE) * BOX_SIZE
-        for x in xrange(row, row + BOX_SIZE):
-            for y in xrange(col, col + BOX_SIZE):
-                yield self.board[x][y]
-
     def related(self, x, y):
-        for i in self.row(x): yield i
-        for i in self.col(y): yield i
-        for i in self.box(x, y): yield i
+        boxx = (x / self.boxlen) * self.boxlen
+        boxy = (y / self.boxlen) * self.boxlen
+        box = [
+            self.board[bx][by] # box
+            for by in xrange(boxy, boxy + self.boxlen)
+            for bx in xrange(boxx, boxx + self.boxlen)
+        ]
+        row = [self.board[i][y] for i in xrange(len(self.board))]
+        col = [i for i in self.board[x]]
+        return row + col + box
 
-    def __init__(self, file_path):
+    def __init__(self, file_path, options = DEFAULT_OPTIONS):
+        self.boxlen = int(sqrt(len(options)))
         self.board = [
-            [Tile(c) for c in line]
+            [Tile(c, options) for c in line]
             for line in open(file_path, 'r').read().split('\n')
         ]
 
         for x, line in enumerate(self.board):
             for y, p in enumerate(line):
-                p.unknown_relatives = set(unknowns(self.related(x, y)))
+                p.unknown_relatives = \
+                    set(i for i in self.related(x, y) if not i.known())
                 p.unknown_relatives.discard(p) # not relative of self!
 
     def solve(self):

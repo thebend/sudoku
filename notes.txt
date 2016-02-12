@@ -1,0 +1,11 @@
+1. map val function instead of list comprehension
+1. load board vs helper function because class init vs functional
+1. list of all possible value options with default args
+1. scrap individual row col box functions
+1. generators for primitive types?
+1. xy ordering is unintuitive
+1. list of lines vs xy coordinates
+
+1. filtering with lambda to check for set was slower than list comprehension
+1. looking up point on board to decide whether to call function which looked up point
+   was faster than always calling function, which looked up point once and stopped sometimes

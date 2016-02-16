@@ -1,6 +1,7 @@
 from math import sqrt
-from collections import deque
+from collections import deque, defaultdict
 from copy import deepcopy
+from itertools import chain
 
 DEFAULT_OPTIONS = set('123456789')
 
@@ -37,8 +38,8 @@ def solve(board, options = DEFAULT_OPTIONS):
     def valid(board):
         for x, line in enumerate(board):
             for y, point in enumerate(line):
-                if type(point) != set and point in related(board, x, y): return True
-        return False
+                if type(point) != set and point in related(board, x, y): return False
+        return True
 
     def solve_point(board, x, y, val):
         board[x][y] = val
@@ -78,7 +79,30 @@ def solve(board, options = DEFAULT_OPTIONS):
         
         # yield clones of board with each point guessed each way
         # some kind of heuristic involved?
-        # Order suggestions in the msot impactful way possible?
+        # Order suggestions in the most impactful way possible?
+        # how many set-type relatives exist for the point?
+        points = defaultdict(list)
+        for x, y in guess_points:
+            points[len([i for i in related(board, x, y) if type(i) == set])].append((x,y))
+
+        for x, y in chain(*[v for k, v in reversed(sorted(points.iteritems()))]):
+            for option in board[x][y]:
+                b2 = deepcopy(board)
+                solve_point(b2, x, y, option)
+                if not valid(b2): continue
+                solve_board(b2)
+                yield b2
+        '''
+        for k in reversed(sorted(points.iterkeys())):
+            for x, y in points[k]:
+                for option in board[x][y]:
+                    b2 = deepcopy(board)
+                    solve_point(b2, x, y, option)
+                    if not valid(b2): continue
+                    solve_board(b2)
+                    yield b2
+        '''
+        '''
         for x, y in guess_points:
             for option in board[x][y]:
                 b2 = deepcopy(board)
@@ -86,6 +110,7 @@ def solve(board, options = DEFAULT_OPTIONS):
                 if not valid(b2): continue
                 solve_board(b2)
                 yield b2
+        '''
 
     # bfs
     solve_board(board)

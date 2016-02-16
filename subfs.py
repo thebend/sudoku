@@ -86,6 +86,7 @@ def solve(board, options = DEFAULT_OPTIONS):
             points[len([i for i in related(board, x, y) if type(i) == set])].append((x,y))
 
         for x, y in chain(*[v for k, v in reversed(sorted(points.iteritems()))]):
+        # for x, y in guess_points:
             for option in board[x][y]:
                 b2 = deepcopy(board)
                 solve_point(b2, x, y, option)
@@ -93,23 +94,14 @@ def solve(board, options = DEFAULT_OPTIONS):
                 solve_board(b2)
                 yield b2
         '''
-        for k in reversed(sorted(points.iterkeys())):
-            for x, y in points[k]:
+        for k, v in reversed(sorted(points.iterkeys())):
+            for x, y in v:
                 for option in board[x][y]:
                     b2 = deepcopy(board)
                     solve_point(b2, x, y, option)
                     if not valid(b2): continue
                     solve_board(b2)
                     yield b2
-        '''
-        '''
-        for x, y in guess_points:
-            for option in board[x][y]:
-                b2 = deepcopy(board)
-                solve_point(b2, x, y, option)
-                if not valid(b2): continue
-                solve_board(b2)
-                yield b2
         '''
 
     # bfs

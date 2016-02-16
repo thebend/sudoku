@@ -34,7 +34,7 @@ def solve(board, options = DEFAULT_OPTIONS):
                 if type(point) == set: return False
         return True
 
-    def invalid(board):
+    def valid(board):
         for x, line in enumerate(board):
             for y, point in enumerate(line):
                 if type(point) != set and point in related(board, x, y): return True
@@ -83,7 +83,7 @@ def solve(board, options = DEFAULT_OPTIONS):
             for option in board[x][y]:
                 b2 = deepcopy(board)
                 solve_point(b2, x, y, option)
-                if invalid(b2): continue
+                if not valid(b2): continue
                 solve_board(b2)
                 yield b2
 

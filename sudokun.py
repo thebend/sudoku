@@ -27,8 +27,8 @@ class Sudoku:
         )
 
     def related(self, x, y):
-        boxx = (x / self.boxlen) * self.boxlen
-        boxy = (y / self.boxlen) * self.boxlen
+        boxx = x / self.boxlen * self.boxlen
+        boxy = y / self.boxlen * self.boxlen
         return self.board[x] + [line[y] for line in self.board] + [
             self.board[bx][by]
             for by in xrange(boxy, boxy + self.boxlen)

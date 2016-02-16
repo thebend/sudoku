@@ -16,8 +16,8 @@ def solve(board, options = DEFAULT_OPTIONS):
     boxlen = int(sqrt(len(options)))
     
     def related(board, x, y):
-        boxx = (x / boxlen) * boxlen
-        boxy = (y / boxlen) * boxlen
+        boxx = x / boxlen * boxlen
+        boxy = y / boxlen * boxlen
         return board[x] + [line[y] for line in board] + [
             board[bx][by]
             for by in xrange(boxy, boxy + boxlen)
@@ -25,14 +25,12 @@ def solve(board, options = DEFAULT_OPTIONS):
         ]
 
     def reduce(board, x, y):
-        point = board[x][y]
         relations = related(board, x, y)
-        point -= set(i for i in relations if type(i) != set)
-        if len(point) == 1:
-            point = point.pop()
-            board[x][y] = point
+        board[x][y] -= set(i for i in relations if type(i) != set)
+        if len(board[x][y]) == 1:
+            board[x][y] = board[x][y].pop()
             for i in relations:
-                if type(i) == set: i.discard(point)
+                if type(i) == set: i.discard(board[x][y])
             return True
         return False
 

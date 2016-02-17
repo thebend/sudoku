@@ -1,5 +1,5 @@
 from math import sqrt
-from collections import deque, defaultdict
+from collections import defaultdict
 from copy import deepcopy
 from itertools import chain
 
@@ -78,41 +78,30 @@ def solve(board, options = DEFAULT_OPTIONS):
                     guess_points.append((x,y))
         
         # yield clones of board with each point guessed each way
-        # some kind of heuristic involved?
-        # Order suggestions in the most impactful way possible?
-        # how many set-type relatives exist for the point?
+        # prioritize by exploring most impactful guesses first
         points = defaultdict(list)
         for x, y in guess_points:
-            influence = len([i for i in related(board, x, y) if type(i) == set])        
-            points[influence].append((x,y))
-
-        for x, y in chain(*[points[k] for k in reversed(sorted(points))]):
-        # for x, y in guess_points:
             for option in board[x][y]:
-                b2 = deepcopy(board)
-                solve_point(b2, x, y, option)
-                if not valid(b2): continue
-                solve_board(b2)
-                yield b2
-        '''
-        for k, v in reversed(sorted(points)):
-            for x, y in v:
-                for option in board[x][y]:
-                    b2 = deepcopy(board)
-                    solve_point(b2, x, y, option)
-                    if not valid(b2): continue
-                    solve_board(b2)
-                    yield b2
-        '''
+                influence = len([i for i in related(board, x, y) if type(i) == set and option in i])        
+                points[influence].append((x,y,option))
 
-    # bfs
+        for x, y, option in chain(*[points[k] for k in sorted(points)]):
+        # for x, y in guess_points:
+            b2 = deepcopy(board)
+            solve_point(b2, x, y, option)
+            if not valid(b2): continue
+            solve_board(b2)
+            yield b2
+
+    # dfs - queue is added based on board impact = likelihood of success
     solve_board(board)
-    node_queue = deque((board,))
+    node_queue = [board]
     visited_nodes = []
     while node_queue:
-        node = node_queue.popleft()
+        node = node_queue.pop()
         if node in visited_nodes: continue
         visited_nodes.append(node)
+        print board_string(node)
         if solved(node): return node
         node_queue.extend(next_boards(node))
     return False

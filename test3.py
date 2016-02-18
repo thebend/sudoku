@@ -1,6 +1,7 @@
 import sudoku
 import subfs
-import subfsi
+import sudfs
+import sui
 
 path = 'puzzles/8.txt'
 OPTIONS = set('123456789')
@@ -18,7 +19,7 @@ print 'Single pass attempt'
 print sudoku.board_string(board)
 print
 print
-board = subfsi.get_board(path, OPTIONS)
-board = subfsi.solve(board, OPTIONS)
-if board: print subfsi.board_string(board)
+board = sui.get_board(path, OPTIONS)
+board = sui.solve(board, OPTIONS)
+if board: print sui.board_string(board)
 else: print 'No solution'

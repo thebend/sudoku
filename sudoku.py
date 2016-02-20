@@ -1,4 +1,4 @@
-import itertools
+from itertools import chain
 from math import sqrt
 
 DEFAULT_OPTIONS = set('123456789')
@@ -55,7 +55,7 @@ def solve(board, options = DEFAULT_OPTIONS):
 
         # must be what nothing else can be
         for group in rowr, colr, boxr:
-            unique_options = point - set(itertools.chain(*filter(unknown, group)))
+            unique_options = point - set(chain(*filter(unknown, group)))
             if resolve(x, y, unique_options, relations): return True
 
         if choices > len(point): return True

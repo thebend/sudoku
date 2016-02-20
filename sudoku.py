@@ -32,7 +32,6 @@ def solve(board, options = DEFAULT_OPTIONS):
     def resolve(x, y, options, relations):
         if len(options) == 1:
             board[x][y] = options.pop()
-            map(dis, relations)
             for i in relations:
                 if type(i) == set: i.discard(board[x][y])
             return True

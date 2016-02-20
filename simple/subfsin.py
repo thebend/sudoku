@@ -1,3 +1,6 @@
+'''
+Uses bfs but orders additions by influence
+'''
 from math import sqrt
 from collections import defaultdict
 from copy import deepcopy
@@ -63,27 +66,6 @@ def solve(board, options = DEFAULT_OPTIONS):
                     if type(point) == set and reduce(board, x, y):
                         progress = True
 
-    ''' wrong data structure for this!  Shouldn't have to sort every time '''
-    '''
-    modify to calculate based on distance to solved?
-    combination of influence and distance?
-    '''
-    def get_next_board(queue):
-        for influence in reversed(sorted(queue)):
-            options = queue[influence]
-            while options:
-                x, y, option, board = options.pop()
-                b2 = deepcopy(board)
-                solve_point(b2, x, y, option)
-                if not valid(b2): continue
-                solve_board(b2)
-                return b2
-        return False
-
-    def add_options(queue, additions):
-        for influence, options in additions.iteritems():
-            queue[influence].extend(options)
-
     def next_boards(board):
         # get coordinates of all points with
         # fewest number of guesses to choose from
@@ -104,19 +86,25 @@ def solve(board, options = DEFAULT_OPTIONS):
         for x, y in guess_points:
             for option in board[x][y]:
                 influence = len([i for i in related(board, x, y) if type(i) == set and option in i])        
-                points[influence].append((x, y, option, board))
-        return points
+                points[influence].append((x,y,option))
 
-    # Order of traversal based on size of impact to board of next guess
-    visited_boards = []
+        for x, y, option in chain(*[points[k] for k in sorted(points)]):
+        # for x, y in guess_points:
+            b2 = deepcopy(board)
+            solve_point(b2, x, y, option)
+            if not valid(b2): continue
+            solve_board(b2)
+            yield b2
+
+    # dfs - queue is added based on board impact = likelihood of success
     solve_board(board)
-    board_queue = defaultdict(list)
-    while not solved(board):
-        visited_boards.append(board)
-        print board_string(board)
-        print
-        add_options(board_queue, next_boards(board))
-        while board in visited_boards:
-            board = get_next_board(board_queue)
-            if not board: return False
-    return board
+    node_queue = [board]
+    visited_nodes = []
+    while node_queue:
+        node = node_queue.pop()
+        if node in visited_nodes: continue
+        visited_nodes.append(node)
+        print board_string(node)
+        if solved(node): return node
+        node_queue.extend(next_boards(node))
+    return False

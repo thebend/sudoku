@@ -1,6 +1,7 @@
 from math import sqrt
-from collections import deque
+from collections import deque, defaultdict
 from copy import deepcopy
+from itertools import chain
 
 DEFAULT_OPTIONS = set('123456789')
 
@@ -28,21 +29,42 @@ def solve(board, options = DEFAULT_OPTIONS):
                 for bx in xrange(boxx, boxx + boxlen) if bx != x
             ]
 
-    # print ' '.join(c if type(c) != set else ' ' for c in (related(board, 0, 0)))
-    
-    def invalid(board):
+    def solved(board):
+        for line in board:
+            for point in line:
+                if type(point) == set: return False
+        return True
+
+    def valid(board):
         for x, line in enumerate(board):
             for y, point in enumerate(line):
-                if type(point) != set and point in related(board, x, y): return True
-        return False
+                if type(point) != set and point in related(board, x, y): return False
+        return True
 
     def solve_point(board, x, y, val):
         board[x][y] = val
         for i in related(board, x, y):
             if type(i) == set: i.discard(val)
 
+    def reduce(board, x, y):
+        relations = related(board, x, y)
+        board[x][y] -= set(i for i in relations if type(i) != set)
+        if len(board[x][y]) == 1:
+            solve_point(board, x, y, board[x][y].pop())
+            return True
+        return False
+
+    def solve_board(board):
+        progress = True
+        while progress:
+            progress = False
+            for x, line in enumerate(board):
+                for y, point in enumerate(line):
+                    if type(point) == set and reduce(board, x, y):
+                        progress = True
+
     def next_boards(board):
-        # track coordinates of all points with
+        # get coordinates of all points with
         # fewest number of guesses to choose from
         min_guesses = 1000000 # max int
         for x, line in enumerate(board):
@@ -56,37 +78,41 @@ def solve(board, options = DEFAULT_OPTIONS):
                     guess_points.append((x,y))
         
         # yield clones of board with each point guessed each way
+        # some kind of heuristic involved?
+        # Order suggestions in the most impactful way possible?
+        # how many set-type relatives exist for the point?
+        points = defaultdict(list)
         for x, y in guess_points:
+            influence = len([i for i in related(board, x, y) if type(i) == set])        
+            points[influence].append((x,y))
+
+        for x, y in chain(*[points[k] for k in reversed(sorted(points))]):
+        # for x, y in guess_points:
             for option in board[x][y]:
                 b2 = deepcopy(board)
-                # should solve entire board as best as possible
-                # with traditional algorithm
                 solve_point(b2, x, y, option)
-                if invalid(b2): continue
+                if not valid(b2): continue
+                solve_board(b2)
                 yield b2
-
-    def solved(board):
-        for line in board:
-            for point in line:
-                if type(point) == set: return False
-        return True
-
-    # what happens when I make a bad guess?
-    # something will have zero options?
-    # But will solve when it hits one assuming all is good
+        '''
+        for k, v in reversed(sorted(points)):
+            for x, y in v:
+                for option in board[x][y]:
+                    b2 = deepcopy(board)
+                    solve_point(b2, x, y, option)
+                    if not valid(b2): continue
+                    solve_board(b2)
+                    yield b2
+        '''
 
     # bfs
+    solve_board(board)
     node_queue = deque((board,))
     visited_nodes = []
     while node_queue:
         node = node_queue.popleft()
         if node in visited_nodes: continue
         visited_nodes.append(node)
-        print board_string(node)
         if solved(node): return node
         node_queue.extend(next_boards(node))
     return False
-   
-board = get_board('puzzles/1.txt')
-board = subfs.solve(board)
-print subfs.board_string(board)

@@ -1,6 +1,3 @@
-'''
-Uses bfs but orders additions by influence
-'''
 from math import sqrt
 from collections import defaultdict
 from copy import deepcopy

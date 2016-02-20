@@ -3,7 +3,6 @@ import sudoku
 import sudokuclass
 import sudokun
 
-
 path = 'puzzles/6.txt'
 # OPTIONS = set('0123456789ABCDEF')
 OPTIONS = set('ABCDEFGHIJKLMNOPQRSTUVWXY')

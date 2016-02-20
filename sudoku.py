@@ -1,3 +1,8 @@
+'''
+2D list of either values, or sets of possible values.
+Relationships are computed each pass and
+points reduced based on related values and possible values
+'''
 from math import sqrt
 from itertools import chain
 

@@ -1,3 +1,8 @@
+'''
+Tiles notify relatives when solved,
+recursively solving each other
+'''
+
 from math import sqrt
 
 DEFAULT_OPTIONS = set('123456789')

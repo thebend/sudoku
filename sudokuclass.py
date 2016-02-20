@@ -1,19 +1,17 @@
 from math import sqrt
+from sudokuio import board_string
 
 DEFAULT_OPTIONS = set('123456789')
 
 class Sudoku:
-    def __init__(self, file_path, options = DEFAULT_OPTIONS):
+    def __init__(self, board, options = DEFAULT_OPTIONS):
         self.boxlen = int(sqrt(len(options)))
         self.board = [
-            [options.copy() if c == ' ' else c for c in line]
-            for line in open(file_path, 'r').read().split('\n')
+            [c if type(c) == str and c not in ('',' ') else options.copy() for c in line]
+            for line in board
         ]
 
-    def __repr__(self): return '\n'.join(
-            ' '.join(col if type(col) != set else ' ' for col in row)
-            for row in self.board
-        )
+    def __repr__(self): return board_string(self.board)
 
     def related(self, x, y):
         boxx = x / self.boxlen * self.boxlen

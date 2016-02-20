@@ -1,3 +1,4 @@
+import sudokuio
 import sudoku
 import sui
 
@@ -13,15 +14,15 @@ OPTIONS = set('123456789')
 # OPTIONS = set('123456789ABCDEFGHIJKLMNOP')
 
 for path in paths:
-    board = sudoku.get_board(path, OPTIONS)
+    board = sudokuio.get_board(path)
     print 'Original puzzle'
-    print sudoku.board_string(board)
+    print sudokuio.board_string(board)
     print
-    sudoku.solve(board, OPTIONS)
+    board = sudoku.solve(board, OPTIONS)
     print 'Single pass attempt'
-    print sudoku.board_string(board)
+    print sudokuio.board_string(board)
     print
-    board = sui.get_board(path, OPTIONS)
+    board = sudokuio.get_board(path)
     board = sui.solve(board, OPTIONS)
-    print sui.board_string(board)
+    print sudokuio.board_string(board)
     raw_input()

@@ -1,20 +1,14 @@
-from itertools import chain
 from math import sqrt
+from itertools import chain
 
 DEFAULT_OPTIONS = set('123456789')
 
-def get_board(file_path, options = DEFAULT_OPTIONS): return [
-    [options.copy() if c == ' ' else c for c in line]
-    for line in open(file_path, 'r').read().split('\n')
-]
-
-def board_string(board): return '\n'.join(
-    ' '.join(c if type(c) != set else ' ' for c in line)
-    for line in board
-)
-
 def solve(board, options = DEFAULT_OPTIONS):
     boxlen = int(sqrt(len(options)))
+    board = [
+        [c if type(c) == str and c not in ('',' ') else options.copy() for c in line]
+        for line in board
+    ]
     
     def row(x): return list(board[x])
     def col(y): return [line[y] for line in board]
@@ -33,6 +27,7 @@ def solve(board, options = DEFAULT_OPTIONS):
     def resolve(x, y, options, relations):
         if len(options) == 1:
             board[x][y] = options.pop()
+            map(dis, relations)
             for i in relations:
                 if type(i) == set: i.discard(board[x][y])
             return True
@@ -67,3 +62,4 @@ def solve(board, options = DEFAULT_OPTIONS):
             for y, point in enumerate(line):
                 if type(point) == set and reduce(x, y):
                     progress = True
+    return board

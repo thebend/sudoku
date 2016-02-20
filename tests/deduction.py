@@ -1,5 +1,5 @@
 from timeit import timeit
-import sudoku
+import sudoku, sudokuio
 
 path = 'puzzles/dec-deduction-1.txt'
 OPTIONS = set('123456789')
@@ -7,14 +7,14 @@ OPTIONS = set('123456789')
 # OPTIONS = set('ABCDEFGHIJKLMNOPQRSTUVWXY')
 # OPTIONS = set('123456789ABCDEFGHIJKLMNOP')
 
-board = sudoku.get_board(path, OPTIONS)
-print sudoku.board_string(board)
+board = sudokuio.get_board(path)
+print sudokuio.board_string(board)
 print
-sudoku.solve(board, OPTIONS)
-print sudoku.board_string(board)
+board = sudoku.solve(board, OPTIONS)
+print sudokuio.board_string(board)
 print
 print timeit(
-    "sudoku.solve(sudoku.get_board('puzzles/dec-deduction-1.txt'))",
-    setup='import sudoku',
+    "sudoku.solve(sudokuio.get_board('puzzles/dec-deduction-1.txt'))",
+    setup='import sudoku, sudokuio',
     number=1000
 )

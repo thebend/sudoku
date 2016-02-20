@@ -6,24 +6,19 @@ Should consider deque so I'm pulling recent additions
 '''
 
 from math import sqrt
+from itertools import chain
 from collections import defaultdict
 from copy import deepcopy
-from itertools import chain
+import sudokuio
 
 DEFAULT_OPTIONS = set('123456789')
 
-def get_board(file_path, options = DEFAULT_OPTIONS): return [
-    [options.copy() if c == ' ' else c for c in line]
-    for line in open(file_path, 'r').read().split('\n')
-]
-
-def board_string(board): return '\n'.join(
-    ' '.join(c if type(c) != set else ' ' for c in line)
-    for line in board
-)
-
 def solve(board, options = DEFAULT_OPTIONS):
     boxlen = int(sqrt(len(options)))
+    board = [
+        [c if type(c) == str and c not in ('',' ') else options.copy() for c in line]
+        for line in board
+    ]
  
     def related(board, x, y):
         boxx = (x / boxlen) * boxlen
@@ -116,7 +111,7 @@ def solve(board, options = DEFAULT_OPTIONS):
     board_queue = defaultdict(list)
     while not solved(board):
         visited_boards.append(board)
-        print board_string(board)
+        print sudokuio.board_string(board)
         print
         add_options(board_queue, next_boards(board))
         while board in visited_boards:

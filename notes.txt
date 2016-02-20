@@ -11,3 +11,6 @@
    Overhead creating lambda function in a loop?
 1. looking up point on board to decide whether to call function which looked up point
    was faster than always calling function, which looked up point once and stopped sometimes
+
+1. Ripped out row/col/box and knowns/unknowns functions only to put them back in
+1. Minor performance and line count impact from funtion calls, but better readability

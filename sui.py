@@ -12,7 +12,6 @@ from copy import deepcopy
 import sudokuio
 
 DEFAULT_OPTIONS = set('123456789')
-
 def solve(board, options = DEFAULT_OPTIONS):
     boxlen = int(sqrt(len(options)))
     board = [
@@ -54,7 +53,6 @@ def solve(board, options = DEFAULT_OPTIONS):
         if len(board[x][y]) == 1:
             solve_point(board, x, y, board[x][y].pop())
             return True
-        return False
 
     def solve_board(board):
         progress = True
@@ -76,7 +74,6 @@ def solve(board, options = DEFAULT_OPTIONS):
                 if not valid(b2): continue
                 solve_board(b2)
                 return b2
-        return False
 
     def add_options(queue, additions):
         for influence, options in additions.iteritems():

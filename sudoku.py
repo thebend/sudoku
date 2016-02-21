@@ -7,7 +7,6 @@ from math import sqrt
 from itertools import chain
 
 DEFAULT_OPTIONS = set('123456789')
-
 def solve(board, options = DEFAULT_OPTIONS):
     boxlen = int(sqrt(len(options)))
     board = [
@@ -35,7 +34,6 @@ def solve(board, options = DEFAULT_OPTIONS):
             for i in relations:
                 if type(i) == set: i.discard(board[x][y])
             return True
-        return False
     
     def reduce(x, y):
         point = board[x][y]

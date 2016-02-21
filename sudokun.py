@@ -6,7 +6,6 @@ recursively solving each other
 from math import sqrt
 
 DEFAULT_OPTIONS = set('123456789')
-
 class Tile:
     def __init__(self, val, options):
         self.options = options.copy() if val == ' ' else set(val)

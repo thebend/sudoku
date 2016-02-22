@@ -18,7 +18,21 @@ def solve(board, options = DEFAULT_OPTIONS):
         [c if type(c) == str and c not in ('',' ') else options.copy() for c in line]
         for line in board
     ]
+
+    def known(point): return type(point) != set
+    def unknown(point): return type(point) == set
  
+    def row(board, x): return list(board[x])
+    def col(board, y): return [line[y] for line in board]
+    def box(board, x, y):
+        boxx = x / boxlen * boxlen
+        boxy = y / boxlen * boxlen
+        return [
+            board[bx][by]
+            for by in xrange(boxy, boxy + boxlen)
+            for bx in xrange(boxx, boxx + boxlen)
+        ]
+
     def related(board, x, y):
         boxx = (x / boxlen) * boxlen
         boxy = (y / boxlen) * boxlen
@@ -42,17 +56,39 @@ def solve(board, options = DEFAULT_OPTIONS):
                 if type(point) != set and point in related(board, x, y): return False
         return True
 
+    def resolve(board, x, y, options, relations):
+        if len(options) == 1:
+            board[x][y] = options.pop()
+            for i in relations:
+                if type(i) == set: i.discard(board[x][y])
+            return True
+    
     def solve_point(board, x, y, val):
         board[x][y] = val
         for i in related(board, x, y):
             if type(i) == set: i.discard(val)
 
     def reduce(board, x, y):
-        relations = related(board, x, y)
-        board[x][y] -= set(i for i in relations if type(i) != set)
-        if len(board[x][y]) == 1:
-            solve_point(board, x, y, board[x][y].pop())
-            return True
+        point = board[x][y]
+        
+        def notpoint(i): return i is not point
+        relrow = filter(notpoint, row(board, x))
+        relcol = filter(notpoint, col(board, y))
+        relbox = filter(notpoint, box(board, x, y))
+        relations = relrow + relcol + relbox
+        
+        if resolve(board, x, y, point, relations): return True
+
+        choices = len(point) # track if we narrow down choices
+        point -= set(filter(known, relations))
+        if resolve(board, x, y, point, relations): return True
+
+        # must be what nothing else can be
+        for group in relrow, relcol, relbox:
+            unique_options = point - set(chain(*filter(unknown, group)))
+            if resolve(board, x, y, unique_options, relations): return True
+
+        if choices > len(point): return True
 
     def solve_board(board):
         progress = True

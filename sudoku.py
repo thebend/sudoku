@@ -27,7 +27,7 @@ def solve(board, options = DEFAULT_OPTIONS):
     
     def known(point): return type(point) != set
     def unknown(point): return type(point) == set
-    
+
     def resolve(x, y, options, relations):
         if len(options) == 1:
             board[x][y] = options.pop()
@@ -39,10 +39,10 @@ def solve(board, options = DEFAULT_OPTIONS):
         point = board[x][y]
         
         def notpoint(i): return i is not point
-        rowr = filter(notpoint, row(x))
-        colr = filter(notpoint, col(y))
-        boxr = filter(notpoint, box(x, y))
-        relations = rowr + colr + boxr
+        relrow = filter(notpoint, row(x))
+        relcol = filter(notpoint, col(y))
+        relbox = filter(notpoint, box(x, y))
+        relations = relrow + relcol + relbox
         
         if resolve(x, y, point, relations): return True
 
@@ -51,7 +51,7 @@ def solve(board, options = DEFAULT_OPTIONS):
         if resolve(x, y, point, relations): return True
 
         # must be what nothing else can be
-        for group in rowr, colr, boxr:
+        for group in relrow, relcol, relbox:
             unique_options = point - set(chain(*filter(unknown, group)))
             if resolve(x, y, unique_options, relations): return True
 

@@ -44,17 +44,12 @@ def solve(board, options = DEFAULT_OPTIONS):
                 for bx in xrange(boxx, boxx + boxlen) if bx != x
             ]
 
-    def solved(board):
-        for line in board:
-            for point in line:
-                if type(point) == set: return False
-        return True
+    def solved(board): return set not in map(type, chain(*board))
 
-    def valid(board):
+    def invalid(board):
         for x, line in enumerate(board):
             for y, point in enumerate(line):
-                if type(point) != set and point in related(board, x, y): return False
-        return True
+                if type(point) != set and point in related(board, x, y): return True
 
     def resolve(board, x, y, options, relations):
         if len(options) == 1:
@@ -107,7 +102,7 @@ def solve(board, options = DEFAULT_OPTIONS):
                 x, y, option, board = options.pop()
                 b2 = deepcopy(board)
                 solve_point(b2, x, y, option)
-                if not valid(b2): continue
+                if valid(b2): continue
                 solve_board(b2)
                 return b2
 

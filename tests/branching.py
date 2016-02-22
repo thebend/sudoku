@@ -1,6 +1,6 @@
 import sudokuio
 import sudoku
-import sui
+import suii
 
 STANDARD_OPTIONS = set('123456789')
 dec = [
@@ -32,6 +32,6 @@ for path, options in dec:
     print sudokuio.board_string(board)
     print
     board = sudokuio.get_board(path)
-    board = sui.solve(board, options)
+    board = suii.solve(board, options)
     print sudokuio.board_string(board)
     raw_input()

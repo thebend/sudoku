@@ -11,9 +11,9 @@ class Tile:
         self.options = options.copy() if val == ' ' else set(val)
 
     def __repr__(self):
-        return ' ' if len(self.options) > 1 else iter(self.options).next()
+        return ' ' if self.unknown() 1 else iter(self.options).next()
 
-    def known(self): return len(self.options) == 1
+    def unknown(self): return len(self.options) > 1
 
     def reduce(self, option):
         if option not in self.options: return # stop if already eliminated
@@ -21,7 +21,7 @@ class Tile:
         self.solve()
 
     def solve(self):
-        if self.known():
+        if not self.unknown():
             for i in self.dependents: i.dependents.discard(self)
             for i in self.dependents: i.reduce(iter(self.options).next())
 
@@ -48,7 +48,7 @@ class Sudoku:
 
         for x, line in enumerate(self.board):
             for y, p in enumerate(line):
-                p.dependents = set(i for i in self.related(x, y) if not i.known())
+                p.dependents = set(filter(Tile.unknown, self.related(x, y)))
                 p.dependents.discard(p)
 
     def solve(self):

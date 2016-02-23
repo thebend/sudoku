@@ -26,7 +26,7 @@ class Point(object):
 
 # Try making a version with this
 class Node(Point):
-    __slots__ = ('point','value')
+    __slots__ = ('x', 'y' ,'value')
 
     def __init__(self, x, y, value):
         self.x = x
